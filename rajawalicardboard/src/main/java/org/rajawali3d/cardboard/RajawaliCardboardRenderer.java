@@ -50,7 +50,14 @@ public abstract class RajawaliCardboardRenderer extends RajawaliRenderer impleme
 
         // Apply the eye transformation to the camera
         eyeMatrix.setAll(eye.getEyeView());
-        eyeQuaternion.fromMatrix(eyeMatrix);
+        //the eye matrix need to be inverted, it is a model matrix not a camera pose
+
+        //the eye matrix contains also the information about the base line defined by the cardboard
+        //configuration. One eye (camera) is translated to the left one to the right. The translation
+        //is in meter unit.
+        //https://developers.google.com/cardboard/android/latest/reference/com/google/vrtoolkit/cardboard/Eye.html#public-methods_2
+        getCurrentCamera().setPosition(eyeMatrix.inverse().getTranslation());
+        eyeQuaternion.fromMatrix(eyeMatrix.inverse());
         getCurrentCamera().setOrientation(eyeQuaternion);
 
         render(ellapsedRealtime, deltaTime);

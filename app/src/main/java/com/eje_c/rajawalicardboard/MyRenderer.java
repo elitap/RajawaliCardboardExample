@@ -18,12 +18,15 @@ public class MyRenderer extends RajawaliCardboardRenderer {
     @Override
     protected void initScene() {
 
-        Sphere sphere = createPhotoSphereWithTexture(new Texture("photo", R.drawable.zvirbloniu_parkas));
+        Sphere sphere = createPhotoSphereWithTexture(new Texture("photo", R.drawable.panorama));
 
         getCurrentScene().addChild(sphere);
 
         getCurrentCamera().setPosition(Vector3.ZERO);
         getCurrentCamera().setFieldOfView(100);
+
+        getCurrentCamera().setFarPlane(2);
+        getCurrentCamera().setNearPlane(0.000000000000001);
     }
 
     private static Sphere createPhotoSphereWithTexture(ATexture texture) {
@@ -37,7 +40,8 @@ public class MyRenderer extends RajawaliCardboardRenderer {
             throw new RuntimeException(e);
         }
 
-        Sphere sphere = new Sphere(50, 64, 32);
+        //cardboard sdk matrices are in meter unit, sphere should addapt to that scale
+        Sphere sphere = new Sphere(1, 128, 64);
         sphere.setScaleX(-1);
         sphere.setMaterial(material);
 
